@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Flashcard = ({ flashcard, onAnswer, onNext }) => {
+const Flashcard = ({ flashcard, onAnswer, onNext, onPrev }) => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h2 className="text-2xl font-bold mb-4">{flashcard.question}</h2>
@@ -18,6 +18,12 @@ const Flashcard = ({ flashcard, onAnswer, onNext }) => {
         onClick={onNext}
       >
         Next Card
+      </button>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white p-2 mt-4"
+        onClick={onPrev}
+      >
+        Back
       </button>
     </div>
   );
@@ -97,12 +103,21 @@ const FlashcardApp = () => {
     }
   };
 
+  const handlePrev = () => {
+    if (currentIndex === 0) {
+      setCurrentIndex(0);
+    } else {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Flashcard
         flashcard={flashcards[currentIndex]}
         onAnswer={handleAnswer}
         onNext={handleNext}
+        onPrev={handlePrev}
       />
       <FlashcardAddForm onAdd={handleAdd} />
     </div>
