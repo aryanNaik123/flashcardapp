@@ -2,29 +2,35 @@ import React, { useState } from "react";
 
 const Flashcard = ({ flashcard, onAnswer, onNext, onPrev }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center text-center justify-center h-screen">
       <h2 className="text-2xl font-bold mb-4">{flashcard.question}</h2>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white p-2"
         onClick={onAnswer}
       >
-        Show Answer
+        {flashcard.showAnswer ? flashcard.answer : "Show Answer"}
       </button>
-      {flashcard.showAnswer && (
-        <div className="text-xl font-bold mt-4">{flashcard.answer}</div>
-      )}
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white p-2 mt-4"
-        onClick={onNext}
-      >
-        Next Card
-      </button>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white p-2 mt-4"
-        onClick={onPrev}
-      >
-        Back
-      </button>
+      <div className="text-xl font-bold mt-4">
+        {flashcard.showAnswer && flashcard.answer}
+      </div>
+      <div>
+        {onPrev && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white p-2 mt-4 m-5"
+            onClick={onPrev}
+          >
+            Back
+          </button>
+        )}
+        {onNext && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white p-2 mt-4 m-5"
+            onClick={onNext}
+          >
+            Next Card
+          </button>
+        )}
+      </div>
     </div>
   );
 };
@@ -77,11 +83,11 @@ const FlashcardAddForm = ({ onAdd }) => {
 };
 
 const FlashcardApp = () => {
-  const [flashcards, setFlashcards] = useState([{ question: "", answer: "" }]);
+  const [flashcards, setFlashcards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleAdd = (flashcard) => {
-    setFlashcards([...flashcards, flashcard]);
+    setFlashcards([...flashcards, { ...flashcard, showAnswer: false }]);
   };
 
   const handleAnswer = () => {
@@ -105,20 +111,27 @@ const FlashcardApp = () => {
 
   const handlePrev = () => {
     if (currentIndex === 0) {
-      setCurrentIndex(0);
+      setCurrentIndex(flashcards.length - 1);
     } else {
       setCurrentIndex(currentIndex - 1);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <Flashcard
-        flashcard={flashcards[currentIndex]}
-        onAnswer={handleAnswer}
-        onNext={handleNext}
-        onPrev={handlePrev}
-      />
+    <div>
+      <h1 className="text-3xl font-bold text-center mb-4">Flashcard App</h1>
+      {flashcards.length > 0 ? (
+        <Flashcard
+          flashcard={flashcards[currentIndex]}
+          onAnswer={handleAnswer}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
+      ) : (
+        <p className="text-center text-xl">
+          Add some flashcards to get started!
+        </p>
+      )}
       <FlashcardAddForm onAdd={handleAdd} />
     </div>
   );

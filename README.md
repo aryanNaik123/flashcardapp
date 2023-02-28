@@ -1,4 +1,4 @@
 Todo
 
 - [ ] Card Counter/Status
-- [ x ] prev button
+- [x] prev button
